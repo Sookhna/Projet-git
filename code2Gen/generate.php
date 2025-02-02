@@ -1,5 +1,5 @@
 <?php
-// generate.php
+// fichier generate.php
 
 if (file_exists('config.php')) {
     $config = include('config.php');
