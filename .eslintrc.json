@@ -1,0 +1,22 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:prettier/recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "rules": {
+    "no-console": "warn",              // Avertit lorsqu'il y a des console.log dans le code.
+    "semi": ["error", "always"],       // Enforce l'utilisation du point-virgule en fin d'instruction.
+    "quotes": ["error", "single"],     // Imposer l'utilisation de guillemets simples pour les chaînes de caractères.
+    "indent": ["error", 2],            // Imposer une indentation de 2 espaces.
+    "linebreak-style": ["error", "unix"] // Forcer le style de saut de ligne Unix (LF).
+  }
+}

@@ -1,0 +1,4 @@
+npm test
+mkdir -p .husky
+echo "#!/bin/sh\n. \"$(dirname "$0")/../node_modules/.bin/npm\" run test" > .husky/pre-push
+chmod +x .husky/pre-push

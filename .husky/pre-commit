@@ -1,0 +1,4 @@
+npm test
+mkdir -p .husky
+echo "#!/bin/sh\n. \"$(dirname "$0")/../node_modules/.bin/npm\" run lint" > .husky/pre-commit
+sudo chmod +x .husky/pre-commit
