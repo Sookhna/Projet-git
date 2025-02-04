@@ -9,7 +9,7 @@ if (file_exists('config.php')) {
 
 // Retrieve the API key and AI provider from the config file
 $IA_USED = $config['ia_used'];
-$API_KEY = $IA_USED === 'gemini' ? $config['api_key_gemini'] : $config['api_key_open_ai'];
+$API_KEY = $IA_USED === 'gemini' ? $config['AIzaSyCsjfsgwuSoeAXXztvSVXuvnQkuPLyhNx0'] : $config['api_key_open_ai'];
 $MODEL = $IA_USED === 'gemini' ? 'gemini-1.5-flash-latest' : 'gpt-4o-mini'; // Adjust the model based on the provider
 $buildsDir = __DIR__ . '/builds'; // Directory where generated files are stored
 
