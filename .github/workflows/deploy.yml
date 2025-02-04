@@ -28,5 +28,5 @@ jobs:
       # Étape 4 : Déployer sur App Engine
       - name: Deploy to App Engine
         run: |
+          cd code2Gen   # Aller dans le dossier de l'application
           gcloud app deploy app.yaml --quiet
-
