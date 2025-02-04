@@ -1,1 +1,1 @@
-{"version":1,"defects":[],"times":{"GenerateTest::testGeneratedLinksExist":0.067}}
+{"version":1,"defects":{"GenerateTest::testGenerateCode#0":8,"GenerateTest::testGenerateCode#1":8,"GenerateTest::testGenerateCode#2":7},"times":{"GenerateTest::testGeneratedLinksExist":0.002,"GenerateTest::testGenerateCode#0":0,"GenerateTest::testGenerateCode#1":0,"GenerateTest::testGenerateCode#2":0}}

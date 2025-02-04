@@ -84,6 +84,12 @@ if (php_sapi_name() !== 'cli') { // Empêche l'exécution lors des tests PHPUnit
 	// Return the links of the generated files in JSON format
 	echo json_encode(['links' => $fileLinks]);
 }
+
+function generateCode($input) {
+    return '<div>' . htmlspecialchars($input, ENT_QUOTES, 'UTF-8') . '</div>';
+}
+
+
 /**
  * Sends the prompt to the selected API and retrieves the generated files.
  *
