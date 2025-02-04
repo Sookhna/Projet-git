@@ -1,0 +1,14 @@
+runtime: php74  # ou php82 selon la version que tu utilises
+
+env_variables:
+  # Si tu as des variables d'environnement spécifiques, tu peux les ajouter ici.
+  APP_ENV: production
+
+handlers:
+  # Servir les fichiers statiques (CSS, JS, images)
+  - url: /static
+    static_dir: static/
+
+  # Rediriger toutes les autres requêtes vers 'generate.php'
+  - url: /.*
+    script: auto
