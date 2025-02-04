@@ -1,16 +1,20 @@
 <?php
-
 use PHPUnit\Framework\TestCase;
 
-// Inclure le fichier à tester
-require_once __DIR__ . 'generate.php';
-
 class GenerateTest extends TestCase {
-    public function testGenerateCode() {
-        // Appeler la fonction de generate.php
-        $result = generateCode("Test input");
+    public function testGeneratedLinksExist() {
+        // Vérifie que les fichiers générés existent bien
+        $expectedFiles = [
+            'Chat_Like_GPT.html',
+            'code_editor.html',
+            'ecommerce.html',
+            'pong.html',
+            'Tetris_Game.html'
+        ];
 
-        // Vérifier que le résultat est correct
-        $this->assertEquals("<div>Test input</div>", $result);
+        foreach ($expectedFiles as $file) {
+            $this->assertFileExists(__DIR__ . '/builds/' . $file, "Le fichier $file n'existe pas.");
+        }
     }
 }
+

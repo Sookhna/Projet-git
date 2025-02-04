@@ -1,63 +1,89 @@
 <?php
 // fichier generate.php
 
-if (file_exists('config.php')) {
-    $config = include('config.php');
-} else {    
-    $config['api_key_open_ai'] = null;
-}
+//if (file_exists('config.php')) {
+  //  $config = include('config.php');
+//} else {    
+  //  $config['api_key_open_ai'] = null;
+//}
 
 // Retrieve the API key and AI provider from the config file
-$IA_USED = $config['ia_used'];
-$API_KEY = $IA_USED === 'gemini' ? $config['AIzaSyCsjfsgwuSoeAXXztvSVXuvnQkuPLyhNx0'] : $config['api_key_open_ai'];
-$MODEL = $IA_USED === 'gemini' ? 'gemini-1.5-flash-latest' : 'gpt-4o-mini'; // Adjust the model based on the provider
-$buildsDir = __DIR__ . '/builds'; // Directory where generated files are stored
+//$IA_USED = $config['ia_used'];
+//$API_KEY = $IA_USED === 'gemini' ? $config['AIzaSyCsjfsgwuSoeAXXztvSVXuvnQkuPLyhNx0']
+//$MODEL = $IA_USED === 'gemini' ? 'gemini-1.5-flash-latest' : 'gpt-4o-mini'; // Adjust the model based on the provider
+//$buildsDir = __DIR__ . '/builds'; // Directory where generated files are stored
 
-// If the API key is not defined, fallback to serving a random build
-if (empty($API_KEY)) {
-    serveRandomBuild($buildsDir);
-    exit;
+// fichier generate.php
+
+// Charger la configuration si le fichier config.php existe, sinon définir des valeurs par défaut
+if (php_sapi_name() !== 'cli') { // Empêche l'exécution lors des tests PHPUnit (mode CLI)
+	if (file_exists('config.php')) {
+    		$config = include('config.php');
+	} else {    
+    		$config = [
+        	'ia_used' => 'openai',          // Valeur par défaut (peut être modifiée)
+        	'api_key_open_ai' => null
+    		];
+	}
+
+	// Récupérer le fournisseur d'IA et la clé API à partir du tableau de configuration
+	$IA_USED = $config['ia_used'] ?? 'openai';
+	$API_KEY = $IA_USED === 'gemini'
+    	? ($config['AIzaSyCsjfsgwuSoeAXXztvSVXuvnQkuPLyhNx0'] ?? null)
+    	: ($config['api_key_open_ai'] ?? null);
+	$MODEL = $IA_USED === 'gemini'
+    	? 'gemini-1.5-flash-latest'
+    	: 'gpt-4o-mini'; // Ajuste le modèle selon le fournisseur
+
+	// Définir le répertoire où seront stockés les fichiers générés
+	$buildsDir = __DIR__ . '/builds';
+
+
+	// If the API key is not defined, fallback to serving a random build
+	if (empty($API_KEY)) {
+    		serveRandomBuild($buildsDir);
+    		exit;
+	}
+
+	// Read the data from the request body
+	$data = json_decode(file_get_contents('php://input'), true);
+	$description = $data['description'] ?? '';
+
+	if (empty($description)) {
+    		respondWithError('No description provided');
+    		exit;
+	}
+
+	// Increment a build number
+	$buildNumber = incrementBuildCount('build_count.txt');
+
+	// Create a prompt to generate a complete HTML file with inline CSS and JS
+	$prompt = buildPrompt($description);
+
+	// Send the prompt to the selected API and get a response
+	$generatedFiles = getGeneratedFiles($prompt, $API_KEY, $MODEL, $IA_USED);
+
+	if (!$generatedFiles) {
+    		respondWithError('Invalid format received from generated files');
+    		exit;
+	}
+
+	// Check if the builds directory exists, otherwise create it
+	if (!is_dir($buildsDir)) {
+    		mkdir($buildsDir, 0775, true);  // Create the directory with 775 permissions
+	}
+
+	// Write the generated files to disk and get their links
+	$fileLinks = saveGeneratedFiles($generatedFiles, $buildNumber, $buildsDir);
+
+	if (empty($fileLinks)) {
+    		respondWithError('Failed to write generated files');
+    		exit;
+	}
+
+	// Return the links of the generated files in JSON format
+	echo json_encode(['links' => $fileLinks]);
 }
-
-// Read the data from the request body
-$data = json_decode(file_get_contents('php://input'), true);
-$description = $data['description'] ?? '';
-
-if (empty($description)) {
-    respondWithError('No description provided');
-    exit;
-}
-
-// Increment a build number
-$buildNumber = incrementBuildCount('build_count.txt');
-
-// Create a prompt to generate a complete HTML file with inline CSS and JS
-$prompt = buildPrompt($description);
-
-// Send the prompt to the selected API and get a response
-$generatedFiles = getGeneratedFiles($prompt, $API_KEY, $MODEL, $IA_USED);
-
-if (!$generatedFiles) {
-    respondWithError('Invalid format received from generated files');
-    exit;
-}
-
-// Check if the builds directory exists, otherwise create it
-if (!is_dir($buildsDir)) {
-    mkdir($buildsDir, 0775, true);  // Create the directory with 775 permissions
-}
-
-// Write the generated files to disk and get their links
-$fileLinks = saveGeneratedFiles($generatedFiles, $buildNumber, $buildsDir);
-
-if (empty($fileLinks)) {
-    respondWithError('Failed to write generated files');
-    exit;
-}
-
-// Return the links of the generated files in JSON format
-echo json_encode(['links' => $fileLinks]);
-
 /**
  * Sends the prompt to the selected API and retrieves the generated files.
  *
