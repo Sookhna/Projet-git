@@ -1,4 +1,5 @@
 name: Deploy Code2Gen to Google Cloud
+
 on:
   push:
     branches:
@@ -7,22 +8,22 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      # Étape 1 : Récupérer le code du dépôt
+      # Étape 1 : Récupérer le code
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # Étape 2 : Lister les fichiers dans le dépôt pour vérifier l'arborescence
-      - name: List files in repository
-        run: ls -R
+      # Étape 2 : Authentification avec Google Cloud
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-      # Étape 3 : Installer Google Cloud SDK (version mise à jour)
+      # Étape 3 : Configurer le SDK Google Cloud
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SA_KEY }}
 
       # Étape 4 : Déployer sur App Engine
       - name: Deploy to App Engine
