@@ -15,7 +15,7 @@ jobs:
 
       # Étape 2 : Naviguer dans le sous-dossier 'code2Gen'
       - name: Change directory to code2Gen
-        run: cd Projet-git/code2Gen
+        run: cd ./code2Gen
 
       # Étape 3 : Installer Google Cloud SDK
       - name: Set up Google Cloud SDK
