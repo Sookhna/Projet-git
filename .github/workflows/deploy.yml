@@ -1,0 +1,30 @@
+name: Deploy Code2Gen to Google Cloud
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Étape 1 : Récupérer le code du dépôt
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Étape 2 : Naviguer dans le sous-dossier 'code2Gen'
+      - name: Change directory to code2Gen
+        run: cd Projet-git/code2Gen
+
+      # Étape 3 : Installer Google Cloud SDK
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+
+      # Étape 4 : Déployer sur App Engine (ou autre service GCP)
+      - name: Deploy to App Engine
+        run: |
+          gcloud app deploy app.yaml --quiet
