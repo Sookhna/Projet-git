@@ -1,0 +1,18 @@
+{
+    "name": "kali/code2gen",
+    "description": "Générateur de code simple pour le projet code2Gen",
+    "autoload": {
+        "psr-4": {
+            "Kali\\Code2gen\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Sokhna",
+            "email": "sokhouu4@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^11.5"
+    }
+}
