@@ -19,7 +19,7 @@ class GenerateTest extends TestCase {
         }
     }
 
-    public static  function generateCodeProvider() {
+    public static function generateCodeProvider() {
     	return [
         	["Test input", "<div>Test input</div>"],
         	["", "<div></div>"],
