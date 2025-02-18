@@ -7,8 +7,8 @@ form.addEventListener('submit', async (event) => {
     event.preventDefault(); // Empêche le rechargement de la page lors de la soumission du formulaire
 
     // Check if the description is provided
-    const description = document.getElementById('description').value;
-    if (!description.trim()) {
+    const description = document.getElementById('descriptionInput').value.trim();
+    if (!description) {
         alert('Please enter a description!');
         return;
     }
@@ -30,15 +30,13 @@ form.addEventListener('submit', async (event) => {
         const resultDiv = document.getElementById('result');
 
         // Check if the response contains generated links
-        let link = data.links && data.links[0] ? data.links[0] : null;
-
-        // Display the result or error
-        if (link) {
-            // Get current URL
-            var url = window.location.href;
-            resultDiv.innerHTML = `<a href="${url + link}" target="_blank">View Generated Page</a>`;
+        if (data.error) {
+            resultDiv.innerHTML = `<span style="color: red;">Error: ${data.error}</span>`;
+        } else if (data.links && data.links.length > 0) {
+            // Redirection automatique vers la page générée
+            window.location.href = data.links[0];
         } else {
-            resultDiv.innerHTML = 'Error generating the page.';
+            resultDiv.innerHTML = '<span style="color: red;">Error generating the page.</span>';
         }
     } catch (error) {
         // Display an error message if something goes wrong
