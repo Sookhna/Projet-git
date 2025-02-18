@@ -2,22 +2,22 @@ const loader = document.getElementById('loader');
 
 // Add event listener to the form to handle the submission
 const form = document.getElementById('generate-form');
-form.addEventListener('submit', async function (e) {
-    e.preventDefault(); // Prevent the default form submission
 
-    const description = document.getElementById('description').value;
+form.addEventListener('submit', async (event) => {
+    event.preventDefault(); // Empêche le rechargement de la page lors de la soumission du formulaire
 
     // Check if the description is provided
-    if (!description) {
+    const description = document.getElementById('description').value;
+    if (!description.trim()) {
         alert('Please enter a description!');
         return;
     }
 
-    // Show the loader while processing the request
-    loader.style.display = 'block';
-
     try {
-        // Send a POST request to the PHP backend with the description
+        // Show the loader while processing the request
+        loader.style.display = 'block';
+
+        // Send request to generate.php with the description
         const response = await fetch('generate.php', {
             method: 'POST',
             headers: {
@@ -28,14 +28,15 @@ form.addEventListener('submit', async function (e) {
 
         const data = await response.json();
         const resultDiv = document.getElementById('result');
+
         // Check if the response contains generated links
-        let link = (data.links && data.links[0]) ? data.links[0] : null;
+        let link = data.links && data.links[0] ? data.links[0] : null;
 
         // Display the result or error
         if (link) {
-            //get current url 
+            // Get current URL
             var url = window.location.href;
-            resultDiv.innerHTML = `<a href="${url+link}" target="_blank">View Generated Page</a>`;
+            resultDiv.innerHTML = `<a href="${url + link}" target="_blank">View Generated Page</a>`;
         } else {
             resultDiv.innerHTML = 'Error generating the page.';
         }
