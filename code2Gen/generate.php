@@ -1,19 +1,10 @@
 <?php
 // fichier generate.php
 
-//if (file_exists('config.php')) {
-  //  $config = include('config.php');
-//} else {    
-  //  $config['api_key_open_ai'] = null;
-//}
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+header('Content-Type: application/json'); // Assurez-vous que la réponse est bien du JSON
 
-// Retrieve the API key and AI provider from the config file
-//$IA_USED = $config['ia_used'];
-//$API_KEY = $IA_USED === 'gemini' ? $config['AIzaSyCsjfsgwuSoeAXXztvSVXuvnQkuPLyhNx0']
-//$MODEL = $IA_USED === 'gemini' ? 'gemini-1.5-flash-latest' : 'gpt-4o-mini'; // Adjust the model based on the provider
-//$buildsDir = __DIR__ . '/builds'; // Directory where generated files are stored
-
-// fichier generate.php
 
 // Charger la configuration si le fichier config.php existe, sinon définir des valeurs par défaut
 if (php_sapi_name() !== 'cli') { // Empêche l'exécution lors des tests PHPUnit (mode CLI)
